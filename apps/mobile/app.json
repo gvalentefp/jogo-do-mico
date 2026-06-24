@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Jogo do Mico",
+    "slug": "jogo-do-mico",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "scheme": "mico",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gvalentefp.jogodomico"
+    },
+    "android": {
+      "package": "com.gvalentefp.jogodomico"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
+  }
+}

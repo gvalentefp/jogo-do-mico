@@ -1,0 +1,55 @@
+# Docker Swarm stack.
+#   docker build -f infra/docker/server.Dockerfile -t mico-server:latest .
+#   docker stack deploy -c infra/swarm/stack.yml mico
+#
+# NOTE: rooms are held in-memory per task. A given room lives on the task that
+# created it, so keep replicas: 1 until a shared room store (e.g. Redis) lands.
+# `endpoint_mode: dnsrr` avoids the routing-mesh VIP load-balancing WebSockets
+# across tasks. Scale-out is tracked in infra/README.md.
+version: "3.9"
+
+services:
+  server:
+    image: mico-server:latest
+    environment:
+      PORT: "8787"
+      HOST: "0.0.0.0"
+      MAX_PLAYERS: "8"
+    ports:
+      - target: 8787
+        published: 8787
+        protocol: tcp
+        mode: host
+    networks:
+      - mico
+    deploy:
+      mode: replicated
+      replicas: 1
+      endpoint_mode: dnsrr
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      update_config:
+        parallelism: 1
+        order: start-first
+        delay: 10s
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+        reservations:
+          cpus: "0.10"
+          memory: 64M
+    healthcheck:
+      test:
+        ["CMD", "node", "-e", "fetch('http://127.0.0.1:8787/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  mico:
+    driver: overlay
+    attachable: true

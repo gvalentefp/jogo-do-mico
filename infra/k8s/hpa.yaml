@@ -1,0 +1,22 @@
+# Template for horizontal scaling. DO NOT enable until rooms live in a shared
+# store (Redis/Valkey) — today each pod holds its own rooms in memory, so
+# scaling out would strand players on different pods. Tracked in infra/README.md.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mico-server
+  namespace: mico
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mico-server
+  minReplicas: 1
+  maxReplicas: 1 # raise once a shared room store exists
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70

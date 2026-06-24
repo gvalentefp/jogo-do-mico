@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/build
+**/web-build
+**/.expo
+**/.turbo
+**/target
+apps/desktop/src-tauri/target
+.git
+*.log
+.env
+.env.*
+**/.terraform
+*.tfstate*

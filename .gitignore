@@ -1,6 +1,39 @@
-﻿node_modules/
-.expo/
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
 dist/
+build/
+web-build/
+.expo/
+.turbo/
+*.tsbuildinfo
+
+# Tauri / Rust
+apps/desktop/src-tauri/target/
+target/
+
+# Logs
 *.log
-.DS_Store
+npm-debug.log*
+
+# Env / secrets
 .env
+.env.*
+!.env.example
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,25 @@
+# WebSocket-aware ingress (nginx). Adjust the host and TLS for your free-tier
+# cluster when you deploy publicly.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mico-server
+  namespace: mico
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: mico.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mico-server
+                port:
+                  number: 80

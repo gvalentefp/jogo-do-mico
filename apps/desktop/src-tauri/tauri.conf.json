@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Jogo do Mico",
+  "version": "0.0.0",
+  "identifier": "com.gvalentefp.jogodomico",
+  "build": {
+    "beforeDevCommand": "pnpm --filter @mico/mobile web",
+    "devUrl": "http://localhost:8081",
+    "beforeBuildCommand": "pnpm --filter @mico/mobile export:web",
+    "frontendDist": "../../mobile/dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Jogo do Mico",
+        "width": 1024,
+        "height": 720,
+        "minWidth": 380,
+        "minHeight": 600
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}
