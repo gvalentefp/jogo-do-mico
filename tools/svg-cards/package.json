@@ -1,0 +1,14 @@
+{
+  "name": "mico-svg-cards",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Gerador de arte das cartas do Jogo do Mico (SVG) + rasterizador",
+  "type": "commonjs",
+  "scripts": {
+    "raster": "node rasterize.js",
+    "montage": "node rasterize.js montage"
+  },
+  "dependencies": {
+    "sharp": "^0.35.2"
+  }
+}
