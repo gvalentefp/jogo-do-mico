@@ -65,7 +65,7 @@ export const MicoCard = memo(function MicoCard({
     ],
   }));
 
-  const art = faceUp ? CARD_ART[artKeyFor(kind, cardId)] : undefined;
+  const art = faceUp ? CARD_ART[artKeyFor(kind, cardId)] : CARD_ART["back"];
 
   return (
     <Pressable
@@ -73,7 +73,6 @@ export const MicoCard = memo(function MicoCard({
       onPressIn={() => (press.value = withSpring(0.93))}
       onPressOut={() => (press.value = withSpring(1))}
       onPress={onPress}
-      style={{ marginHorizontal: -size * 0.14 }}
     >
       <Animated.View
         style={[
@@ -83,17 +82,15 @@ export const MicoCard = memo(function MicoCard({
           animStyle,
         ]}
       >
-        {faceUp ? (
-          art ? (
-            <SvgXml xml={art} width="100%" height="100%" />
-          ) : (
-            <View style={[styles.face, isMico && styles.micoFace]}>
-              <Text style={{ fontSize: size * 0.46 }}>{kindEmoji(kind)}</Text>
-              <Text style={[styles.faceLabel, { fontSize: size * 0.16 }]} numberOfLines={1}>
-                {kindLabel(kind)}
-              </Text>
-            </View>
-          )
+        {art ? (
+          <SvgXml xml={art} width="100%" height="100%" />
+        ) : faceUp ? (
+          <View style={[styles.face, isMico && styles.micoFace]}>
+            <Text style={{ fontSize: size * 0.46 }}>{kindEmoji(kind)}</Text>
+            <Text style={[styles.faceLabel, { fontSize: size * 0.16 }]} numberOfLines={1}>
+              {kindLabel(kind)}
+            </Text>
+          </View>
         ) : (
           <LinearGradient
             colors={[colors.jungleTop, colors.jungleBot]}

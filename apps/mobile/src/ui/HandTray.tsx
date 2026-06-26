@@ -13,10 +13,10 @@ interface HandCard { id: string; kind: string }
 
 /** Uma carta da minha mao que pode ser arrastada para "oferecer". */
 function OfferCard({
-  card, index, canOffer, offered, onOffer, size,
+  card, index, canOffer, offered, onOffer, size, offset,
 }: {
   card: HandCard; index: number; canOffer: boolean; offered: boolean;
-  onOffer: (i: number | null) => void; size: number;
+  onOffer: (i: number | null) => void; size: number; offset: number;
 }) {
   const tx = useSharedValue(0);
   const ty = useSharedValue(0);
@@ -34,8 +34,9 @@ function OfferCard({
     });
 
   const style = useAnimatedStyle(() => ({
+    marginLeft: offset,
     transform: [{ translateX: tx.value }, { translateY: ty.value }],
-    zIndex: offered ? 10 : 1,
+    zIndex: offered ? 100 : index,
   }));
 
   return (
@@ -86,6 +87,7 @@ export function HandTray({
               offered={offeredIndex === i}
               onOffer={onOffer}
               size={size}
+              offset={i === 0 ? 0 : -size * 0.18}
             />
           ))
         )}
@@ -95,7 +97,7 @@ export function HandTray({
 }
 
 const styles = StyleSheet.create({
-  row: { gap: spacing(4), paddingHorizontal: spacing(3), paddingVertical: spacing(3),
+  row: { paddingHorizontal: spacing(4), paddingVertical: spacing(3),
     alignItems: "flex-end", minHeight: 156 },
   hint: { fontFamily: font.semibold, fontSize: 13, color: "#b8860b", textAlign: "center" },
   safe: { fontFamily: font.bold, fontSize: 16, color: colors.leaf, padding: spacing(4) },

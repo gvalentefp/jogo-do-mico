@@ -7,8 +7,8 @@ const path = require("path");
 const outDir = path.join(__dirname, "out");
 const dest = path.resolve(__dirname, "../../apps/mobile/src/cardArt.ts");
 
-const files = fs.readdirSync(outDir)
-  .filter((f) => f.endsWith(".svg") && f !== "back.svg");
+// inclui tambem back.svg -> chave "back" (verso da carta)
+const files = fs.readdirSync(outDir).filter((f) => f.endsWith(".svg"));
 
 const entries = files.map((f) => {
   const key = f.replace(/\.svg$/, "");
