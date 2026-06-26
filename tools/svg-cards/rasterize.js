@@ -15,14 +15,15 @@ async function render(file) {
 }
 
 async function montage(pngs) {
-  const cols = 3;
+  const cols = Number(process.env.COLS || 6);
+  const thumb = Number(process.env.THUMB || 150);
   const imgs = await Promise.all(
     pngs.map(async (p) => ({
-      buf: await sharp(p).resize(300).png().toBuffer(),
+      buf: await sharp(p).resize(thumb).png().toBuffer(),
       name: path.basename(p),
     })),
   );
-  const cellW = 300, cellH = 420, pad = 12;
+  const cellW = thumb + 10, cellH = Math.round(thumb * 1.4) + 12, pad = 8;
   const rows = Math.ceil(imgs.length / cols);
   const W = cols * cellW + (cols + 1) * pad;
   const H = rows * cellH + (rows + 1) * pad;

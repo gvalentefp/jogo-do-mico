@@ -1,5 +1,8 @@
 node_modules/
 package-lock.json
-out/
 __pycache__/
 test.png
+
+# Mantem os SVGs (entregavel escalavel) e o preview; ignora PNGs individuais.
+out/*.png
+!out/montage.png
