@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { SvgXml } from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -11,11 +12,14 @@ import Animated, {
 } from "react-native-reanimated";
 import { colors, font, radius } from "../theme";
 import { kindEmoji, kindLabel } from "../kinds";
+import { CARD_ART, artKeyFor } from "../cardArt";
 import { Banana } from "./graphics";
 
 export interface MicoCardProps {
   kind: string;
   faceUp: boolean;
+  /** Id do card do baralho (define macho "-a" / femea "-b" da arte). */
+  cardId?: string;
   onPress?: () => void;
   index?: number;
   highlight?: boolean;
@@ -24,9 +28,9 @@ export interface MicoCardProps {
   size?: number;
 }
 
-/** Carta do jogo: verso (selva + banana) ou face (creme + animal). */
-export function MicoCard({
-  kind, faceUp, onPress, index = 0, highlight, wiggle, size = 66,
+/** Carta do jogo: verso (selva + banana) ou face (arte do animal). */
+export const MicoCard = memo(function MicoCard({
+  kind, faceUp, cardId, onPress, index = 0, highlight, wiggle, size = 66,
 }: MicoCardProps) {
   const w = size;
   const h = Math.round(size * 1.4);
@@ -61,6 +65,8 @@ export function MicoCard({
     ],
   }));
 
+  const art = faceUp ? CARD_ART[artKeyFor(kind, cardId)] : undefined;
+
   return (
     <Pressable
       disabled={!onPress}
@@ -71,19 +77,23 @@ export function MicoCard({
     >
       <Animated.View
         style={[
-          styles.card,
-          { width: w, height: h },
-          highlight && styles.highlight,
+          art ? { width: w, height: h } : styles.card,
+          !art && { width: w, height: h },
+          highlight && (art ? styles.highlightArt : styles.highlight),
           animStyle,
         ]}
       >
         {faceUp ? (
-          <View style={[styles.face, isMico && styles.micoFace]}>
-            <Text style={{ fontSize: size * 0.46 }}>{kindEmoji(kind)}</Text>
-            <Text style={[styles.faceLabel, { fontSize: size * 0.16 }]} numberOfLines={1}>
-              {kindLabel(kind)}
-            </Text>
-          </View>
+          art ? (
+            <SvgXml xml={art} width="100%" height="100%" />
+          ) : (
+            <View style={[styles.face, isMico && styles.micoFace]}>
+              <Text style={{ fontSize: size * 0.46 }}>{kindEmoji(kind)}</Text>
+              <Text style={[styles.faceLabel, { fontSize: size * 0.16 }]} numberOfLines={1}>
+                {kindLabel(kind)}
+              </Text>
+            </View>
+          )
         ) : (
           <LinearGradient
             colors={[colors.jungleTop, colors.jungleBot]}
@@ -97,7 +107,7 @@ export function MicoCard({
       </Animated.View>
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
@@ -114,6 +124,11 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: colors.gold,
     padding: 0,
+  },
+  highlightArt: {
+    borderWidth: 3,
+    borderColor: colors.gold,
+    borderRadius: radius.lg,
   },
   face: {
     flex: 1,

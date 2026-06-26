@@ -5,27 +5,33 @@ import type { Card } from "./types.js";
  * matching pair; one extra unpaired card is the Mico (the monkey). Add more
  * entries here to support larger games.
  */
+// Mantido em sincronia com as especies que possuem arte (tools/svg-cards
+// animals.py SPECIES). Cada kind tem arte macho (carta -a) e femea (carta -b).
 export const KINDS: readonly string[] = [
   "leao",
   "tigre",
+  "gato",
+  "cao",
+  "touro",
+  "cavalo",
+  "porco",
+  "bode",
+  "carneiro",
+  "coelho",
+  "rato",
   "elefante",
-  "girafa",
-  "zebra",
-  "hipopotamo",
-  "macaco",
-  "papagaio",
-  "tucano",
-  "jacare",
-  "tartaruga",
-  "cobra",
-  "onca",
+  "urso",
   "lobo",
   "raposa",
-  "coruja",
-  "urso",
-  "panda",
-  "pinguim",
-  "golfinho",
+  "veado",
+  "camelo",
+  "burro",
+  "galo",
+  "pato",
+  "peru",
+  "pavao",
+  "hipopotamo",
+  "zebra",
 ];
 
 export const MICO_KIND = "mico";

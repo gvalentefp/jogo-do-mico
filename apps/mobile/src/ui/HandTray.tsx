@@ -43,6 +43,7 @@ function OfferCard({
       <Animated.View style={style}>
         <MicoCard
           kind={card.kind}
+          cardId={card.id}
           faceUp
           size={size}
           index={index}
@@ -55,7 +56,7 @@ function OfferCard({
 }
 
 export function HandTray({
-  cards, canOffer, offeredIndex, onOffer, size = 66,
+  cards, canOffer, offeredIndex, onOffer, size = 96,
 }: {
   cards: HandCard[];
   canOffer: boolean;
@@ -94,8 +95,8 @@ export function HandTray({
 }
 
 const styles = StyleSheet.create({
-  row: { gap: spacing(2.5), paddingHorizontal: spacing(2), paddingVertical: spacing(3),
-    alignItems: "flex-end", minHeight: 110 },
+  row: { gap: spacing(4), paddingHorizontal: spacing(3), paddingVertical: spacing(3),
+    alignItems: "flex-end", minHeight: 156 },
   hint: { fontFamily: font.semibold, fontSize: 13, color: "#b8860b", textAlign: "center" },
   safe: { fontFamily: font.bold, fontSize: 16, color: colors.leaf, padding: spacing(4) },
 });
