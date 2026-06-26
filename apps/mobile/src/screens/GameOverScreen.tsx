@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Caption, MicoCard, Panel, Title } from "../ui";
 import { colors, font, spacing } from "../theme";
-import type { useMico } from "../useMico";
+import type { GameController } from "../gameController";
 
-export function GameOverScreen({ mico }: { mico: ReturnType<typeof useMico> }) {
-  const { view, leave } = mico;
+export function GameOverScreen({ ctrl }: { ctrl: GameController }) {
+  const { view, leave, restart } = ctrl;
   const game = view.game!;
   const loser = game.players.find((p) => p.id === game.loserId);
   const iLost = game.loserId === view.playerId;
@@ -26,7 +26,15 @@ export function GameOverScreen({ mico }: { mico: ReturnType<typeof useMico> }) {
       </Panel>
 
       <View style={{ gap: spacing(3) }}>
-        <Button label="Voltar ao início" icon="🏠" onPress={leave} />
+        {restart ? (
+          <Button label="Jogar de novo" icon="🔁" onPress={restart} />
+        ) : null}
+        <Button
+          label="Voltar ao início"
+          icon="🏠"
+          variant={restart ? "secondary" : "primary"}
+          onPress={leave}
+        />
       </View>
     </View>
   );

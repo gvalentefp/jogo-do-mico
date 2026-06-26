@@ -10,6 +10,8 @@ export * from "./graphics";
 export * from "./components";
 export * from "./JungleBackground";
 export * from "./MicoCard";
+export * from "./PlayerSpot";
+export * from "./HandTray";
 
 /** Carrega as fontes Baloo 2 (a "voz" tipografica do app). */
 export function useAppFonts(): boolean {

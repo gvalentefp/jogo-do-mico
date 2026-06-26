@@ -5,9 +5,16 @@
     "jsx": "react-jsx",
     "moduleResolution": "Bundler",
     "paths": {
-      "@mico/core": ["../../packages/core/src/index.ts"],
-      "@mico/net": ["../../packages/net/src/index.ts"]
+      "@mico/core": [
+        "../../packages/core/src/index.ts"
+      ],
+      "@mico/net": [
+        "../../packages/net/src/index.ts"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

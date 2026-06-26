@@ -36,6 +36,7 @@ export function createGame(
     id: p.id,
     name: p.name,
     hand: [],
+    pairs: 0,
     finished: false,
   }));
 
@@ -111,6 +112,7 @@ export function applyMove(
     const [hi, lo] = [Math.max(matchIndex, drawnIndex), Math.min(matchIndex, drawnIndex)];
     drawer.hand.splice(hi, 1);
     drawer.hand.splice(lo, 1);
+    drawer.pairs += 1;
     state.log.push({ type: "discardedPair", playerId: drawer.id, kind: card.kind, at });
   }
 
@@ -160,6 +162,7 @@ function discardAllPairs(player: Player, log: GameEvent[]): void {
   const keep: Card[] = [];
   for (const [kind, cards] of byKind) {
     const pairs = Math.floor(cards.length / 2);
+    player.pairs += pairs;
     for (let i = 0; i < pairs; i++) {
       log.push({ type: "discardedPair", playerId: player.id, kind, at: log.length });
     }

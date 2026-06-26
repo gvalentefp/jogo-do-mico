@@ -3,9 +3,9 @@ import { Button, Caption, Logo } from "../ui";
 import { colors, font, spacing } from "../theme";
 
 export function HomeScreen({
-  onCreate, onJoin, onRules,
+  onSolo, onCreate, onJoin, onRules,
 }: {
-  onCreate: () => void; onJoin: () => void; onRules: () => void;
+  onSolo: () => void; onCreate: () => void; onJoin: () => void; onRules: () => void;
 }) {
   return (
     <View style={styles.root}>
@@ -15,13 +15,14 @@ export function HomeScreen({
       </View>
 
       <View style={styles.actions}>
-        <Button label="Criar sala" icon="🎲" onPress={onCreate} />
+        <Button label="Jogar sozinho" icon="🎮" onPress={onSolo} />
+        <Button label="Criar sala" icon="🎲" variant="secondary" onPress={onCreate} />
         <Button label="Entrar numa sala" icon="🚪" variant="secondary" onPress={onJoin} />
         <Button label="Como jogar" icon="❓" variant="ghost" onPress={onRules} />
       </View>
 
       <Caption color={colors.onDarkSoft} center>
-        Jogue na mesma rede com amigos
+        Jogue sozinho contra a IA ou com amigos na mesma rede
       </Caption>
     </View>
   );

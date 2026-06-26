@@ -12,6 +12,8 @@ export interface Player {
   id: string;
   name: string;
   hand: Card[];
+  /** Number of pairs this player has discarded (their "montinho"). */
+  pairs: number;
   /** True once the player has emptied their hand (they are safe). */
   finished: boolean;
 }

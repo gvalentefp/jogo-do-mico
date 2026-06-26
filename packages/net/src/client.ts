@@ -57,6 +57,10 @@ export class MicoClient {
     this.move({ type: "draw", cardIndex });
   }
 
+  tease(cardIndex: number | null): void {
+    this.sendMessage({ t: "tease", cardIndex });
+  }
+
   leave(): void {
     this.sendMessage({ t: "leave" });
   }

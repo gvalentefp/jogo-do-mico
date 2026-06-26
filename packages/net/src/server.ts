@@ -77,6 +77,8 @@ export class GameServer {
         return this.onStart(connId, msg);
       case "move":
         return this.onMove(connId, msg);
+      case "tease":
+        return this.onTease(connId, msg);
       case "leave":
         return this.onDisconnect(connId);
       case "ping":
@@ -188,6 +190,21 @@ export class GameServer {
       return this.fail(connId, code, message);
     }
     this.broadcast(room);
+  }
+
+  private onTease(
+    connId: string,
+    msg: Extract<ClientMessage, { t: "tease" }>,
+  ): void {
+    const found = this.locate(connId);
+    if (!found) return;
+    const { room, playerId } = found;
+    if (!room.game) return;
+    // repassa o "sacudir" para os demais jogadores conectados da sala
+    for (const player of room.players.values()) {
+      if (player.connId === null || player.id === playerId) continue;
+      this.send(player.connId, { t: "tease", fromId: playerId, cardIndex: msg.cardIndex });
+    }
   }
 
   private broadcast(room: Room): void {

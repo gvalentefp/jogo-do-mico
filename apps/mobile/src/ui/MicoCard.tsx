@@ -4,6 +4,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
+  withSequence,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
@@ -17,17 +19,20 @@ export interface MicoCardProps {
   onPress?: () => void;
   index?: number;
   highlight?: boolean;
+  /** Sacode a carta (alguem a esta "oferecendo"). */
+  wiggle?: boolean;
   size?: number;
 }
 
 /** Carta do jogo: verso (selva + banana) ou face (creme + animal). */
 export function MicoCard({
-  kind, faceUp, onPress, index = 0, highlight, size = 66,
+  kind, faceUp, onPress, index = 0, highlight, wiggle, size = 66,
 }: MicoCardProps) {
   const w = size;
   const h = Math.round(size * 1.4);
   const enter = useSharedValue(0);
   const press = useSharedValue(1);
+  const shake = useSharedValue(0);
   const isMico = kind === "mico";
 
   useEffect(() => {
@@ -35,10 +40,23 @@ export function MicoCard({
     enter.value = withSpring(1, { damping: 13, stiffness: 120, mass: 0.6 });
   }, [enter]);
 
+  useEffect(() => {
+    if (wiggle) {
+      shake.value = withRepeat(
+        withSequence(
+          withTiming(-1, { duration: 90 }),
+          withTiming(1, { duration: 90 }),
+        ), -1, true);
+    } else {
+      shake.value = withTiming(0, { duration: 120 });
+    }
+  }, [wiggle, shake]);
+
   const animStyle = useAnimatedStyle(() => ({
     opacity: enter.value,
     transform: [
-      { translateY: (1 - enter.value) * 22 },
+      { translateY: (1 - enter.value) * 22 - (wiggle ? 6 : 0) },
+      { rotate: `${shake.value * 7}deg` },
       { scale: press.value },
     ],
   }));

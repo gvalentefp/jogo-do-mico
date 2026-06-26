@@ -24,6 +24,7 @@ export type ClientMessage =
   | { t: "join"; roomId: string; name: string; version?: number }
   | { t: "start"; pairCount?: number }
   | { t: "move"; move: Move }
+  | { t: "tease"; cardIndex: number | null }
   | { t: "leave" }
   | { t: "ping" };
 
@@ -32,6 +33,7 @@ export type ServerMessage =
   | { t: "joined"; playerId: string; roomId: string; hostId: string }
   | { t: "lobby"; roomId: string; hostId: string; players: PlayerSummary[] }
   | { t: "state"; state: GameState; players: PlayerSummary[] }
+  | { t: "tease"; fromId: string; cardIndex: number | null }
   | { t: "error"; code: ErrorCode; message: string }
   | { t: "pong" };
 

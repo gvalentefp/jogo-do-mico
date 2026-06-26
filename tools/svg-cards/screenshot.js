@@ -40,16 +40,20 @@ async function shot(page, name) {
   await shot(page, "home");
 
   try {
-    await page.getByText("Criar sala").click();
-    await shot(page, "create");
-    await page.getByText("‹").click();
-    await page.waitForTimeout(400);
-  } catch (e) { console.log("nav create:", e.message); }
-
-  try {
-    await page.getByText("Como jogar").click();
-    await shot(page, "rules");
-  } catch (e) { console.log("nav rules:", e.message); }
+    await page.getByText("Jogar sozinho").click();
+    await page.waitForTimeout(500);
+    await shot(page, "solo_setup");
+    await page.getByText("Começar").click();
+    await page.waitForTimeout(2000);
+    await shot(page, "game");
+    // compra do alvo (clica no baralho do 1o adversario) para avancar os turnos
+    await page.mouse.click(80, 182);
+    for (let i = 0; i < 9; i++) {
+      await page.waitForTimeout(650);
+      await page.screenshot({ path: path.join(outDir, `app_turn_${i}.png`) });
+    }
+    console.log("turns captured");
+  } catch (e) { console.log("nav solo:", e.message); }
 
   await browser.close();
   server.close();

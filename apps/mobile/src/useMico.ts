@@ -31,9 +31,16 @@ const INITIAL: MicoView = {
  */
 export function useMico() {
   const [view, setView] = useState<MicoView>(INITIAL);
+  // carta que estou oferecendo (minha) e a que um adversario esta sacudindo
+  const [offeredIndex, setOfferedIndex] = useState<number | null>(null);
+  const [teasing, setTeasing] = useState<{ fromId: string; cardIndex: number | null } | null>(null);
   const clientRef = useRef<MicoClient | null>(null);
 
   const onMessage = useCallback((msg: ServerMessage) => {
+    if (msg.t === "tease") {
+      setTeasing(msg.cardIndex == null ? null : { fromId: msg.fromId, cardIndex: msg.cardIndex });
+      return;
+    }
     setView((v) => {
       switch (msg.t) {
         case "joined":
@@ -68,18 +75,32 @@ export function useMico() {
   );
 
   const start = useCallback((pairCount?: number) => clientRef.current?.start(pairCount), []);
-  const draw = useCallback((cardIndex: number) => clientRef.current?.draw(cardIndex), []);
+  const draw = useCallback((cardIndex: number) => {
+    clientRef.current?.draw(cardIndex);
+    setOfferedIndex(null);
+  }, []);
+  const offer = useCallback((cardIndex: number | null) => {
+    setOfferedIndex(cardIndex);
+    clientRef.current?.tease(cardIndex);
+  }, []);
   const leave = useCallback(() => {
     clientRef.current?.leave();
     clientRef.current?.close();
     clientRef.current = null;
+    setOfferedIndex(null);
+    setTeasing(null);
     setView(INITIAL);
   }, []);
+
+  const teasingFor = useCallback((playerId: string): number | null => {
+    if (playerId === view.playerId) return offeredIndex;
+    return teasing && teasing.fromId === playerId ? teasing.cardIndex : null;
+  }, [view.playerId, offeredIndex, teasing]);
 
   const isMyTurn =
     view.game?.phase === "playing" &&
     view.game.players[view.game.turnIndex]?.id === view.playerId;
   const isHost = view.playerId !== null && view.playerId === view.hostId;
 
-  return { view, connect, start, draw, leave, isMyTurn, isHost };
+  return { view, connect, start, draw, offer, teasingFor, leave, isMyTurn, isHost };
 }
